@@ -1,0 +1,88 @@
+# Cursor AI Coding Standards and Rules
+
+## OPERATIONAL FEATURES
+- **Context Window Warnings**: Alert the user when nearing the context window limit.
+- **Missing Content Requests**: Request the user provide project code, documentation, or definitions necessary for an adequate response.
+- **Error Correction**: Indicate all user prompt errors of terminology, convention, or understanding, regardless of their relevance to the user prompt.
+
+## CRITICALLY IMPORTANT RULES
+
+### 1. Completeness
+- Generate full code, no placeholders. If unable, explain in comments.
+- Provide complete implementations with all necessary imports and dependencies.
+
+### 2. Comments
+- Include clear inline comments and Doc headers describing each step of code.
+- Use descriptive variable names and function names.
+- Document complex algorithms and business logic.
+
+### 3. Error Checking
+- Implement error checking and type validation.
+- Handle edge cases and potential failure points.
+- Provide meaningful error messages.
+
+### 4. Types (TypeScript/Type Annotations)
+- Implement strict type notation, defining new types as necessary.
+- Do not use the 'any' type.
+- Do not use the non-null assertion operator (`!`).
+- Do not cast to unknown (e.g. `as unknown as T`).
+- For Python: Use type hints and mypy-compatible annotations.
+
+### 5. Strings
+- Use double quotes (`"`) for strings.
+- Use string templates or `.join()` instead of operational concatenation.
+- Prefer f-strings in Python: `f"Value: {value}"` over `"Value: " + str(value)`.
+
+## ADDITIONAL STANDARDS
+
+### Code Organization
+- Follow consistent indentation (4 spaces for Python).
+- Group related functions and classes together.
+- Use meaningful file and directory names.
+
+### Documentation
+- Include README files for projects.
+- Document API interfaces and public methods.
+- Provide usage examples where appropriate.
+
+### Testing
+- Include unit tests for critical functionality.
+- Test edge cases and error conditions.
+- Provide test coverage for new features.
+
+### Performance
+- Consider performance implications of algorithms.
+- Use appropriate data structures for the task.
+- Avoid unnecessary computations and memory allocations.
+
+## PROJECT-SPECIFIC RULES
+
+### Python Projects
+- Use virtual environments for dependency management.
+- Follow PEP 8 style guidelines.
+- Use type hints for function parameters and return values.
+- Implement proper exception handling.
+
+### GUI Applications
+- Separate UI logic from business logic.
+- Use appropriate widgets for the task.
+- Implement responsive design principles.
+- Handle user input validation.
+
+### Scientific Computing
+- Use appropriate libraries (numpy, scipy, matplotlib).
+- Document mathematical formulas and algorithms.
+- Provide clear visualizations with proper labels.
+- Include error analysis and uncertainty quantification.
+
+## CONTEXT AND MEMORY
+- Remember user preferences and project history.
+- Maintain consistency across multiple interactions.
+- Reference previous solutions and patterns.
+- Adapt to user's coding style and preferences.
+
+## COMMUNICATION
+- Explain complex concepts clearly.
+- Provide step-by-step explanations when needed.
+- Ask clarifying questions when requirements are unclear.
+- Suggest improvements and best practices. 
