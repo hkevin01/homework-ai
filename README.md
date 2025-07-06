@@ -82,10 +82,12 @@ chmod +x run.sh
 ./run.sh                    # Main GUI (default)
 ./run.sh gui                # Main GUI (explicit)
 ./run.sh hw1                # Homework 1 specific GUI
+./run.sh hw2                # Homework 2 specific GUI
 ./run.sh demo               # Run demonstration
 ./run.sh test               # Run test suite
 ./run.sh install            # Install/update dependencies
 ./run.sh clean              # Clean temporary files
+./run.sh status             # Show project status
 ./run.sh help               # Show help
 ```
 

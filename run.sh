@@ -83,17 +83,21 @@ show_usage() {
     echo -e "${BOLD}Options:${NC}"
     echo "  gui           Launch the main GUI application (default)"
     echo "  hw1           Launch Homework 1 specific GUI"
+    echo "  hw2           Launch Homework 2 specific GUI"
     echo "  demo          Run a demonstration problem"
     echo "  test          Run the test suite"
     echo "  install       Install/update dependencies"
     echo "  clean         Clean temporary files"
+    echo "  status        Show project status and structure"
     echo "  help          Show this help message"
     echo
     echo -e "${BOLD}Examples:${NC}"
     echo "  ./run.sh              # Launch main GUI"
     echo "  ./run.sh gui          # Launch main GUI"
     echo "  ./run.sh hw1          # Launch Homework 1 GUI"
+    echo "  ./run.sh hw2          # Launch Homework 2 GUI"
     echo "  ./run.sh demo         # Run demonstration"
+    echo "  ./run.sh status       # Show project info"
 }
 
 # Function to launch main GUI
@@ -115,6 +119,21 @@ launch_hw1() {
     else
         echo -e "${RED}❌ Homework 1 GUI not found${NC}"
         exit 1
+    fi
+}
+
+# Function to launch homework 2 GUI
+launch_hw2() {
+    echo -e "${BLUE}🚀 Launching Homework 2 GUI...${NC}"
+    if [ -f "$SRC_DIR/homework2/enhanced_gui.py" ]; then
+        cd "$SRC_DIR/homework2"
+        $PYTHON_CMD enhanced_gui.py
+    elif [ -f "$SRC_DIR/homework2/gui_app.py" ]; then
+        cd "$SRC_DIR/homework2"
+        $PYTHON_CMD gui_app.py
+    else
+        echo -e "${YELLOW}⚠️  Homework 2 specific GUI not found. Using main GUI...${NC}"
+        launch_gui
     fi
 }
 
@@ -171,7 +190,68 @@ clean_temp() {
     # Remove matplotlib cache
     rm -rf ~/.matplotlib 2>/dev/null || true
     
+    # Remove any temporary log files
+    find "$PROJECT_ROOT" -type f -name "*.log" -delete 2>/dev/null || true
+    find "$PROJECT_ROOT" -type f -name "*~" -delete 2>/dev/null || true
+    
     echo -e "${GREEN}✅ Temporary files cleaned${NC}"
+}
+
+# Function to show project status
+show_status() {
+    echo -e "${BLUE}📊 Project Status${NC}"
+    echo -e "${BLUE}=================${NC}"
+    echo
+    
+    # Project info
+    echo -e "${BOLD}📁 Project Directory:${NC} $PROJECT_ROOT"
+    echo -e "${BOLD}🐍 Python Version:${NC} $PYTHON_VERSION"
+    echo
+    
+    # Count files
+    echo -e "${BOLD}📈 File Statistics:${NC}"
+    echo "  📄 Python files: $(find "$PROJECT_ROOT" -name "*.py" | wc -l)"
+    echo "  📝 Documentation: $(find "$PROJECT_ROOT" -name "*.md" | wc -l)"
+    echo "  🧪 Test files: $(find "$PROJECT_ROOT/tests" -name "*.py" 2>/dev/null | wc -l)"
+    echo
+    
+    # Assignment info
+    echo -e "${BOLD}📚 Available Assignments:${NC}"
+    if [ -d "$SRC_DIR/homework1" ]; then
+        hw1_problems=$(find "$SRC_DIR/homework1" -name "problem*.py" 2>/dev/null | wc -l)
+        echo "  📖 Homework 1: $hw1_problems problems"
+    fi
+    if [ -d "$SRC_DIR/homework2" ]; then
+        hw2_problems=$(find "$SRC_DIR/homework2" -name "problem*.py" 2>/dev/null | wc -l)
+        echo "  📖 Homework 2: $hw2_problems problems"
+    fi
+    echo
+    
+    # Check key dependencies
+    echo -e "${BOLD}🔧 Dependencies Status:${NC}"
+    if $PYTHON_CMD -c "import PyQt5" 2>/dev/null; then
+        echo -e "  ✅ PyQt5"
+    else
+        echo -e "  ❌ PyQt5"
+    fi
+    
+    if $PYTHON_CMD -c "import numpy" 2>/dev/null; then
+        echo -e "  ✅ NumPy"
+    else
+        echo -e "  ❌ NumPy"
+    fi
+    
+    if $PYTHON_CMD -c "import matplotlib" 2>/dev/null; then
+        echo -e "  ✅ Matplotlib"
+    else
+        echo -e "  ❌ Matplotlib"
+    fi
+    
+    if $PYTHON_CMD -c "import scipy" 2>/dev/null; then
+        echo -e "  ✅ SciPy"
+    else
+        echo -e "  ❌ SciPy"
+    fi
 }
 
 # Main script logic
@@ -192,6 +272,10 @@ main() {
             check_dependencies
             launch_hw1
             ;;
+        "hw2")
+            check_dependencies
+            launch_hw2
+            ;;
         "demo")
             check_dependencies
             run_demo
@@ -205,6 +289,10 @@ main() {
             ;;
         "clean")
             clean_temp
+            ;;
+        "status")
+            check_python
+            show_status
             ;;
         "help"|"-h"|"--help")
             show_usage
