@@ -1,23 +1,69 @@
-# Homework 1 - Introduction to Scientific Machine Learning
+# Homework 1: Introduction to Scientific Machine Learning
 
-This module contains complete solutions for the Scientific Machine Learning homework assignment, covering four main problems:
+## 📚 Course Overview
+This assignment introduces fundamental concepts in scientific machine learning, focusing on probabilistic reasoning, Bayesian inference, and real-world applications in engineering and science.
 
-## Problem Structure
+## 🎯 Learning Objectives
+By completing this assignment, students will:
+- Master Bayes' theorem and its applications in medical diagnostics
+- Understand discrete probability distributions and random variables
+- Apply probabilistic models to earthquake prediction
+- Analyze mechanical system reliability using probability theory
+- Develop computational skills in Python for scientific computing
 
-### Problem 1: Tuberculosis Test Assessment
-- **File**: `problem1_tuberculosis_test.py`
-- **Topic**: Bayesian probability and medical test evaluation
-- **Key Concepts**: Prior/posterior probabilities, likelihood ratios, test accuracy
+## 🧩 Problem Descriptions
 
-### Problem 2: Discrete Random Variables
-- **File**: `problem2_discrete_random_variables.py`
-- **Topic**: Categorical random variables and probability mass functions
-- **Key Concepts**: Expectation, variance, PMF visualization
+### Problem 1: Tuberculosis Test Analysis 🏥
+**File:** `problem1_tuberculosis_test.py`
 
-### Problem 3: Earthquake Prediction
-- **File**: `problem3_earthquake_prediction.py`
-- **Topic**: Poisson processes and earthquake probability modeling
-- **Key Concepts**: Poisson distribution, time series analysis, prediction
+**Scenario:** You are a medical data analyst evaluating the effectiveness of a tuberculosis screening test. The test has known sensitivity and specificity rates, and you need to determine the probability that a patient actually has tuberculosis given a positive test result.
+
+**Key Concepts:**
+- Bayes' theorem application in medical diagnostics
+- Sensitivity, specificity, and positive predictive value
+- Prior probability and population prevalence
+- False positive and false negative rates
+
+**Real-world Application:** This type of analysis is crucial in medical decision-making, helping doctors interpret test results and make informed treatment decisions.
+
+### Problem 2: Discrete Random Variables 🎲
+**File:** `problem2_discrete_random_variables.py`
+
+**Scenario:** Analyze various discrete probability distributions commonly encountered in scientific applications, including binomial, Poisson, and geometric distributions.
+
+**Key Concepts:**
+- Discrete probability mass functions
+- Expected value and variance calculations
+- Distribution parameter estimation
+- Monte Carlo simulation methods
+
+**Real-world Application:** These distributions model count data in experiments, arrival processes, and reliability studies.
+
+### Problem 3: Earthquake Prediction Model 🌍
+**File:** `problem3_earthquake_prediction.py`
+
+**Scenario:** Develop a probabilistic model for earthquake occurrence based on historical seismic data. Analyze the relationship between magnitude, frequency, and geographic location.
+
+**Key Concepts:**
+- Exponential and power-law distributions
+- Gutenberg-Richter law for earthquake magnitudes
+- Poisson processes for temporal modeling
+- Risk assessment and uncertainty quantification
+
+**Real-world Application:** Essential for seismic hazard assessment, building codes, and disaster preparedness planning.
+
+### Problem 4: Mechanical System Reliability 🔧
+**File:** `problem4_mechanical_failure.py`
+
+**Scenario:** Analyze the reliability of a mechanical system with multiple components, each having different failure rates and dependencies.
+
+**Key Concepts:**
+- Reliability functions and hazard rates
+- Series and parallel system configurations
+- Weibull distribution for failure modeling
+- Maintenance scheduling optimization
+
+**Real-world Application:** Critical for aerospace, automotive, and industrial equipment design and maintenance planning.
 
 ### Problem 4: Mechanical Component Failure
 - **File**: `problem4_mechanical_failure.py`

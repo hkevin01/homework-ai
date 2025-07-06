@@ -1,0 +1,28 @@
+{
+  "title": "Introduction to Scientific Machine Learning",
+  "description": "Fundamental concepts in scientific machine learning focusing on probabilistic reasoning, Bayesian inference, and real-world applications in engineering and science.",
+  "topics": [
+    "Bayesian Inference",
+    "Medical Diagnostics",
+    "Discrete Probability Distributions",
+    "Earthquake Prediction",
+    "Reliability Engineering",
+    "Monte Carlo Methods",
+    "Statistical Modeling"
+  ],
+  "status": "Available",
+  "difficulty": "Beginner to Intermediate",
+  "estimated_time": "8-12 hours",
+  "prerequisites": [
+    "Basic probability theory",
+    "Python programming fundamentals",
+    "Elementary statistics"
+  ],
+  "learning_outcomes": [
+    "Apply Bayes' theorem to real-world problems",
+    "Model random phenomena with appropriate distributions",
+    "Perform statistical analysis for engineering problems",
+    "Create effective data visualizations",
+    "Write well-documented scientific Python code"
+  ]
+}

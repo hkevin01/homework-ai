@@ -4,6 +4,23 @@ Problem 1: Tuberculosis Test Assessment
 This module solves the tuberculosis test assessment problem using Bayesian 
 probability. The problem involves calculating probabilities related to disease 
 testing accuracy.
+
+Question:
+A new medical test for tuberculosis has been developed. The test has the following 
+characteristics:
+- 80% of patients with tuberculosis test positive (sensitivity = 0.80)
+- 90% of patients without tuberculosis test negative (specificity = 0.90)
+- The prevalence of tuberculosis in the population is 0.4% (prior probability = 0.004)
+
+Given that a patient tests positive, what is the probability that they actually 
+have tuberculosis? Calculate both the prior and posterior probabilities and 
+analyze whether this test is useful for medical diagnosis.
+
+Learning Objectives:
+- Apply Bayes' theorem to medical diagnosis problems
+- Understand the difference between prior and posterior probabilities
+- Analyze test sensitivity, specificity, and predictive values
+- Evaluate the clinical usefulness of diagnostic tests
 """
 
 

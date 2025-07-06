@@ -2,6 +2,29 @@
 Problem 2: Practice with Discrete Random Variables
 
 This module solves problems related to categorical random variables using scipy.stats.
+
+Question:
+Consider a discrete random variable X that can take values {0, 1, 2, 3} with 
+the following probability mass function:
+- P(X = 0) = 0.1
+- P(X = 1) = 0.3  
+- P(X = 2) = 0.4
+- P(X = 3) = 0.2
+
+Calculate the following:
+1. The expected value E[X]
+2. The variance Var(X) 
+3. The standard deviation σ(X)
+4. Plot the probability mass function
+5. Generate and plot a sample of 1000 random values from this distribution
+6. Compare the theoretical and empirical statistics
+
+Learning Objectives:
+- Work with discrete probability distributions
+- Calculate expected values and variances
+- Use scipy.stats for discrete random variables
+- Compare theoretical vs empirical statistics
+- Create visualizations of probability distributions
 """
 
 import matplotlib.pyplot as plt

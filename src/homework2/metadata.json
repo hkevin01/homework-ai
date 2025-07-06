@@ -1,0 +1,12 @@
+{
+  "title": "Advanced Probability and Bayesian Methods",
+  "description": "This assignment covers advanced probability concepts and Bayesian inference methods used in scientific machine learning.",
+  "topics": [
+    "Bayesian Inference",
+    "MCMC Methods",
+    "Gaussian Processes",
+    "Variational Inference",
+    "Parameter Estimation"
+  ],
+  "status": "Available"
+}
