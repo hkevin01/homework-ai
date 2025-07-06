@@ -86,6 +86,7 @@ chmod +x run.sh
 ./run.sh demo               # Run demonstration
 ./run.sh test               # Run test suite
 ./run.sh install            # Install/update dependencies
+./run.sh build              # Build standalone executable
 ./run.sh clean              # Clean temporary files
 ./run.sh status             # Show project status
 ./run.sh help               # Show help

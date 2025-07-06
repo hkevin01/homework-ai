@@ -87,6 +87,7 @@ show_usage() {
     echo "  demo          Run a demonstration problem"
     echo "  test          Run the test suite"
     echo "  install       Install/update dependencies"
+    echo "  build         Build standalone executable"
     echo "  clean         Clean temporary files"
     echo "  status        Show project status and structure"
     echo "  help          Show this help message"
@@ -97,6 +98,7 @@ show_usage() {
     echo "  ./run.sh hw1          # Launch Homework 1 GUI"
     echo "  ./run.sh hw2          # Launch Homework 2 GUI"
     echo "  ./run.sh demo         # Run demonstration"
+    echo "  ./run.sh build        # Build executable"
     echo "  ./run.sh status       # Show project info"
 }
 
@@ -254,6 +256,84 @@ show_status() {
     fi
 }
 
+# Function to build executable
+build_executable() {
+    echo -e "${BLUE}🏗️ Building Standalone Executable...${NC}"
+    
+    # Check if PyInstaller is installed
+    if ! $PYTHON_CMD -c "import PyInstaller" 2>/dev/null; then
+        echo -e "${YELLOW}📦 Installing PyInstaller...${NC}"
+        $PYTHON_CMD -m pip install PyInstaller
+    fi
+    
+    # Get system info
+    SYSTEM=$(echo "$OSTYPE" | tr '[:upper:]' '[:lower:]')
+    if [[ "$SYSTEM" == *"msys"* ]] || [[ "$SYSTEM" == *"win"* ]]; then
+        SYSTEM="windows"
+        EXE_NAME="homework-ai.exe"
+    else
+        SYSTEM="linux"
+        EXE_NAME="homework-ai"
+    fi
+    
+    echo -e "${BLUE}🖥️  Building for: $SYSTEM${NC}"
+    
+    # Create build command
+    BUILD_CMD=(
+        $PYTHON_CMD -m PyInstaller
+        --onefile
+        --windowed
+        --name homework-ai
+        --distpath dist
+        --workpath build
+        --specpath .
+    )
+    
+    # Add data files
+    if [ -d "$SRC_DIR/homework1" ]; then
+        BUILD_CMD+=(--add-data "$SRC_DIR/homework1:homework1")
+    fi
+    if [ -d "$SRC_DIR/homework2" ]; then
+        BUILD_CMD+=(--add-data "$SRC_DIR/homework2:homework2")
+    fi
+    
+    # Add hidden imports
+    BUILD_CMD+=(
+        --hidden-import PyQt5.QtCore
+        --hidden-import PyQt5.QtGui
+        --hidden-import PyQt5.QtWidgets
+        --hidden-import matplotlib.backends.backend_qt5agg
+        --hidden-import numpy
+        --hidden-import scipy
+    )
+    
+    # Main script
+    BUILD_CMD+=("$SRC_DIR/main_gui.py")
+    
+    echo -e "${YELLOW}🔨 Running PyInstaller...${NC}"
+    
+    if "${BUILD_CMD[@]}"; then
+        if [ -f "dist/$EXE_NAME" ]; then
+            FILE_SIZE=$(du -h "dist/$EXE_NAME" | cut -f1)
+            echo -e "${GREEN}✅ Build successful!${NC}"
+            echo -e "${GREEN}📦 Executable: dist/$EXE_NAME${NC}"
+            echo -e "${GREEN}📏 Size: $FILE_SIZE${NC}"
+            echo
+            echo -e "${BLUE}🚀 To run the executable:${NC}"
+            echo -e "   ./dist/$EXE_NAME"
+        else
+            echo -e "${RED}❌ Build completed but executable not found${NC}"
+        fi
+    else
+        echo -e "${RED}❌ Build failed${NC}"
+        exit 1
+    fi
+    
+    # Clean up build artifacts
+    echo -e "${YELLOW}🧹 Cleaning build artifacts...${NC}"
+    rm -rf build/ *.spec
+}
+
 # Main script logic
 main() {
     # Change to project directory
@@ -286,6 +366,10 @@ main() {
             ;;
         "install")
             install_deps
+            ;;
+        "build")
+            check_python
+            build_executable
             ;;
         "clean")
             clean_temp
