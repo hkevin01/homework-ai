@@ -425,6 +425,12 @@ class MainApplication(QMainWindow):
     
     def closeEvent(self, event):
         """Handle application close event."""
+        # Stop any running threads in assignment widgets
+        for assignment_widget in self.assignment_widgets.values():
+            if hasattr(assignment_widget, 'closeEvent'):
+                assignment_widget.closeEvent(event)
+        
+        # Save settings
         self.save_settings()
         event.accept()
 

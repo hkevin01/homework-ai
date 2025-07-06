@@ -46,45 +46,80 @@ class ProblemRunner(QThread):
         self.problem_file = problem_file
         self.working_dir = working_dir
         self.process = None
+        self.is_running = False
     
     def run(self):
         """Run the problem file and capture output."""
+        self.is_running = True
         try:
             # Change to the working directory
+            original_cwd = os.getcwd()
             os.chdir(self.working_dir)
             
             # Run the Python file
             self.process = subprocess.Popen(
                 [sys.executable, self.problem_file],
                 stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
+                stderr=subprocess.PIPE,
                 text=True,
                 bufsize=1,
                 universal_newlines=True
             )
             
             # Read output line by line
-            for line in iter(self.process.stdout.readline, ''):
-                if line:
-                    self.output_received.emit(line.rstrip())
+            while self.is_running and self.process.poll() is None:
+                if self.process.stdout:
+                    line = self.process.stdout.readline()
+                    if line:
+                        self.output_received.emit(line.rstrip())
+            
+            # Get any remaining output
+            if self.process.stdout:
+                remaining_output = self.process.stdout.read()
+                if remaining_output:
+                    self.output_received.emit(remaining_output.rstrip())
+            
+            # Get stderr if there are errors
+            if self.process.stderr:
+                error_output = self.process.stderr.read()
+                if error_output:
+                    self.output_received.emit(f"⚠️ Warnings/Errors:\n{error_output.rstrip()}")
             
             # Wait for process to complete
-            self.process.wait()
+            if self.is_running:
+                self.process.wait()
+                
+                if self.process.returncode == 0:
+                    self.output_received.emit("\n✅ Problem completed successfully!")
+                else:
+                    self.error_occurred.emit(f"Process exited with code {self.process.returncode}")
             
-            if self.process.returncode == 0:
-                self.output_received.emit("\n✅ Problem completed successfully!")
-            else:
-                self.error_occurred.emit(f"Process exited with code {self.process.returncode}")
+            # Restore original working directory
+            os.chdir(original_cwd)
                 
         except Exception as e:
             self.error_occurred.emit(f"Error running problem: {str(e)}")
         finally:
+            self.is_running = False
+            if self.process:
+                try:
+                    self.process.terminate()
+                    self.process.wait(timeout=5)
+                except:
+                    pass
             self.finished.emit()
     
     def stop(self):
         """Stop the running process."""
+        self.is_running = False
         if self.process and self.process.poll() is None:
-            self.process.terminate()
+            try:
+                self.process.terminate()
+                self.process.wait(timeout=3)
+                if self.process.poll() is None:
+                    self.process.kill()
+            except:
+                pass
 
 
 class FigureWidget(QWidget):
@@ -521,6 +556,12 @@ class ProblemWidget(QWidget):
                               f"Problem file not found: {self.problem_data['file_name']}")
             return
         
+        # Stop any existing runner
+        if hasattr(self, 'problem_runner') and self.problem_runner:
+            self.problem_runner.stop()
+            self.problem_runner.wait(3000)  # Wait up to 3 seconds
+            self.problem_runner.deleteLater()
+        
         # Clear previous output
         self.clear_output()
         
@@ -540,7 +581,7 @@ class ProblemWidget(QWidget):
     
     def stop_problem(self):
         """Stop the running problem."""
-        if self.problem_runner:
+        if hasattr(self, 'problem_runner') and self.problem_runner:
             self.problem_runner.stop()
     
     def on_problem_finished(self):
@@ -548,7 +589,12 @@ class ProblemWidget(QWidget):
         self.run_button.setEnabled(True)
         self.stop_button.setEnabled(False)
         self.progress_bar.setVisible(False)
-        self.problem_runner = None
+        
+        # Clean up the thread
+        if hasattr(self, 'problem_runner') and self.problem_runner:
+            self.problem_runner.wait(1000)  # Wait up to 1 second
+            self.problem_runner.deleteLater()
+            self.problem_runner = None
     
     def append_output(self, text: str):
         """Append text to the output area."""
@@ -565,6 +611,15 @@ class ProblemWidget(QWidget):
     def clear_output(self):
         """Clear the output area."""
         self.output_text.clear()
+    
+    def closeEvent(self, event):
+        """Handle widget close event."""
+        # Stop any running problem
+        if hasattr(self, 'problem_runner') and self.problem_runner:
+            self.problem_runner.stop()
+            self.problem_runner.wait(3000)  # Wait up to 3 seconds
+            self.problem_runner.deleteLater()
+        event.accept()
 
 
 class AssignmentWidget(QWidget):
@@ -691,3 +746,13 @@ class AssignmentWidget(QWidget):
         layout.addWidget(help_label)
         
         self.problem_tabs.addTab(no_problems_widget, "No Problems")
+    
+    def closeEvent(self, event):
+        """Handle widget close event."""
+        # Stop any running problems in all problem widgets
+        for problem_widget in self.problem_widgets.values():
+            if hasattr(problem_widget, 'problem_runner') and problem_widget.problem_runner:
+                problem_widget.problem_runner.stop()
+                problem_widget.problem_runner.wait(3000)
+                problem_widget.problem_runner.deleteLater()
+        event.accept()
