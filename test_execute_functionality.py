@@ -3,8 +3,8 @@
 Simple test script to verify the GUI execute functionality
 """
 
-import sys
 import os
+import sys
 from pathlib import Path
 
 # Add src to path
@@ -64,6 +64,7 @@ def test_gui_imports():
     
     try:
         from PyQt5.QtCore import QThread
+
         from assignment_widget import ProblemRunner
         print("✅ PyQt5 and custom widgets imported successfully")
         return True
